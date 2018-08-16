@@ -1,0 +1,45 @@
+Panel - Dinamies
+TPanel
+color = $00D08615
+font.name = Harrington
+     size = 11
+height = 548
+left = 616
+name = pnl5
+top = 21
+width = 553
+
+
+label - dinamies
+TLabel
+caption = help
+font.name = 39 smooth
+     size = 26
+heigth = 39
+left = 276
+name = lbl12
+top = 12
+width = 71
+
+
+richedit - Dinamies
+TRichEdit
+font.name = Harrington
+     size = 11
+height = 472
+left = 24
+lines = Help
+	....
+	.......
+	............
+	................
+
+
+	Gaan Dinamies create word
+	met .txt file
+
+	Read only : True;
+name = redaf
+readonly = true
+top = 57
+width =513

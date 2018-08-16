@@ -1,0 +1,28 @@
+program InfiniCount_p;
+
+uses
+  Forms,
+  Register in 'Register.pas' {FrmRegister},
+  Login in 'Login.pas' {FrmLogin},
+  Main in 'Main.pas' {frmMain},
+  Transaction in 'Transaction.pas' {frmTrans},
+  Begin_u in 'Begin_u.pas' {frmBegin},
+  Category in 'Category.pas' {FrmCategory},
+  Connection in 'Connection.pas' {Form1},
+  Connection2 in 'Connection2.pas' {Connection2A};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TFrmRegister, FrmRegister);
+  Application.CreateForm(TFrmLogin, FrmLogin);
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmTrans, frmTrans);
+  Application.CreateForm(TfrmBegin, frmBegin);
+  Application.CreateForm(TFrmCategory, FrmCategory);
+  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TConnection2A, Connection2A);
+  Application.Run;
+end.

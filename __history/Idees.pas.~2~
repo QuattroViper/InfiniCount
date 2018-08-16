@@ -1,0 +1,16 @@
+unit Idees;
+
+interface
+
+implementation
+
+end.
+    //Idee vir Warnings
+
+    //Die program gaan die gemiddeld uitwerk van die begin van die maand
+    //tot die huidige dag en dan uitwerk of die gebruiker n sekere
+    //persentasie in die rooi gaan wees aan die einde van die maand.
+    //As die uitgawes n sekere persentasie gaan wees gaan die program
+    //automaties die gebruiker verhoed om enege transaksies te doen.
+    //Die enige transaksie wat gaan plaasvind is vanaf een account na
+    //n ander account om hom weer in die positief te kom.

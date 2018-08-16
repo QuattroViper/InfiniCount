@@ -1,0 +1,42 @@
+unit Timer;
+
+interface
+uses
+Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ComCtrls, ExtCtrls;
+
+type
+TTimer = class(TThread)
+   protected
+    procedure execute; override;
+  end;
+
+implementation
+
+uses admin;
+
+{ TTimer }
+
+
+procedure TTimer.execute;
+var
+ iInc : integer;
+ OnTerminate : TNotifyEvent;
+begin
+  inherited;
+  iInc := 1;
+ while not Terminated do
+  begin
+   repeat
+    Sleep(1);  //100
+    Inc(iInc);
+   until iInc = 600;
+   if iInc = 600 then
+    begin
+     ShowMessage('For security purposes, every 10 minutes you will be signed out of the Admin');
+     frmAdmin.Close;
+     Self.Terminate;
+    end;
+  end;
+end;
+end.

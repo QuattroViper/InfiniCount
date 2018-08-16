@@ -1,0 +1,219 @@
+unit Login;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, jpeg, ExtCtrls;
+
+type
+  TFrmLogin = class(TForm)
+    edtUsername: TEdit;
+    edtPassword: TEdit;
+    btnLogin: TButton;
+    btnBack: TButton;
+    img1: TImage;
+    lblName: TLabel;
+    lblPass: TLabel;
+    lbl1: TLabel;
+    procedure btnLoginClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
+    procedure rbSeeMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure edtPasswordMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure edtPasswordMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure FormResize(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+  private
+    { Private declarations }
+  public
+    procedure BeginningOfMonth;
+  end;
+
+var
+  FrmLogin: TFrmLogin;
+
+implementation
+
+uses Main, Begin_u, Connection2, Connection, Warning, frmLoadingg, Register;
+
+{$R *.dfm}
+
+procedure TFrmLogin.BeginningOfMonth;
+begin
+frmWarning.Dates;
+if frmWarning.MyDay = 1 then
+ begin
+  with Connection.Form1 do
+   begin
+    if tblPMD['Income1Enable'] = True then
+     begin
+      tblChecking.Open;
+      tblChecking.Last;
+      tblChecking.Insert;
+      tblChecking['ID'] := frmMain.LoggedInID;
+      tblChecking['Transaction Date'] := Now;
+      tblChecking['Payee'] := 'AutoDebit';
+      tblChecking['Category'] := 'AutoDebit';
+      tblChecking['Amount In'] := tblPMD['Income1'];
+      tblChecking['Transaction Type'] := 'AutoDebit';
+      tblChecking.Post;
+      tblChecking.Close;
+     end;
+    if tblPMD['Income2Enable'] = True then
+     begin
+      tblChecking.Open;
+      tblChecking.Last;
+      tblChecking.Insert;
+      tblChecking['ID'] := frmMain.LoggedInID;
+      tblChecking['Transaction Date'] := Now;
+      tblChecking['Payee'] := 'AutoDebit';
+      tblChecking['Category'] := 'AutoDebit';
+      tblChecking['Amount In'] := tblPMD['Income2'];
+      tblChecking['Transaction Type'] := 'AutoDebit';
+      tblChecking.Post;
+      tblChecking.Close;
+     end;
+    if tblPMD['Income3Enable'] = True then
+     begin
+      tblChecking.Open;
+      tblChecking.Last;
+      tblChecking.Insert;
+      tblChecking['ID'] := frmMain.LoggedInID;
+      tblChecking['Transaction Date'] := Now;
+      tblChecking['Payee'] := 'AutoDebit';
+      tblChecking['Category'] := 'AutoDebit';
+      tblChecking['Amount In'] := tblPMD['Income3'];
+      tblChecking['Transaction Type'] := 'AutoDebit';
+      tblChecking.Post;
+      tblChecking.Close;
+     end;
+    if tblPMD['Expense1Enable'] = True then
+     begin
+      tblChecking.Open;
+      tblChecking.Last;
+      tblChecking.Insert;
+      tblChecking['ID'] := frmMain.LoggedInID;
+      tblChecking['Transaction Date'] := Now;
+      tblChecking['Payee'] := 'AutoDebit';
+      tblChecking['Category'] := 'AutoDebit';
+      tblChecking['Amount Out'] := tblPMD['Expense1'];
+      tblChecking['Transaction Type'] := 'AutoDebit';
+      tblChecking.Post;
+      tblChecking.Close;
+     end;
+    if tblPMD['Expense2Enable'] = True then
+     begin
+      tblChecking.Open;
+      tblChecking.Last;
+      tblChecking.Insert;
+      tblChecking['ID'] := frmMain.LoggedInID;
+      tblChecking['Transaction Date'] := Now;
+      tblChecking['Payee'] := 'AutoDebit';
+      tblChecking['Category'] := 'AutoDebit';
+      tblChecking['Amount Out'] := tblPMD['Expense2'];
+      tblChecking['Transaction Type'] := 'AutoDebit';
+      tblChecking.Post;
+      tblChecking.Close;
+     end;
+    if tblPMD['Expense3Enable'] = True then
+     begin
+      tblChecking.Open;
+      tblChecking.Last;
+      tblChecking.Insert;
+      tblChecking['ID'] := frmMain.LoggedInID;
+      tblChecking['Transaction Date'] := Now;
+      tblChecking['Payee'] := 'AutoDebit';
+      tblChecking['Category'] := 'AutoDebit';
+      tblChecking['Amount Out'] := tblPMD['Expense3'];
+      tblChecking['Transaction Type'] := 'AutoDebit';
+      tblChecking.Post;
+      tblChecking.Close;
+     end;
+   end;
+ end;
+
+end;
+
+procedure TFrmLogin.btnBackClick(Sender: TObject);
+begin
+FrmLogin.Hide;
+FrmRegister.show;
+end;
+
+procedure TFrmLogin.btnLoginClick(Sender: TObject);                              //werk
+var
+  UserOK, PassOK : Boolean;
+begin
+ Connection2A.ADOInTable.Open;
+ Connection2A.ADOInTable.First;
+
+ if Connection2A.ADOInTable.Locate('Password',edtPassword.Text,[]) = True
+  then PassOK := True
+  else PassOK := False;
+
+ if Connection2A.ADOInTable.Locate('RName',edtUsername.Text,[]) = True
+  then UserOK := True
+  else UserOK := False;
+
+ if PassOK and UserOK = False
+  then ShowMessage('You are not registered. Please go to the Register page.');
+
+ if ((PassOK = False) and (UserOK = True)) or (((PassOK = True) and (UserOK = False)))
+  then ShowMessage('Please make sure your Username or Password is correct');
+
+ if PassOK and UserOK = True then
+  begin
+   Connection2A.ADOInTable.Locate('Password',edtPassword.Text,[]);
+   frmMain.LoggedInAs := edtUsername.Text;
+   frmMain.LoggedInID := Connection2A.ADOInTable['ID'];
+   frmMain.lblGebruikerNaam.Caption := Connection2A.ADOInTable['RName'] + ' ' + Connection2A.ADOInTable['RSurname'];
+   frmWarning.chkEnabled.Checked := Connection2A.ADOInTable['Warning'];
+   frmWarning.edtMaxR.Text := Connection2A.ADOInTable['MaxExp'];
+   frmWarning.edtWarnPer.Text := Connection2A.ADOInTable['WarnAt'];
+   frmMain.DBGrid.DataSource.DataSet := Form1.ADODataSetRun;
+   frmMain.LoggedInAdmin := Connection2A.ADOInTable['Admin'];
+   FrmLogin.Hide;
+   frmMain.Show;
+  end
+ else
+  begin
+   MessageDlg('Username or Password is Incorrect. InfiniCount will now exit',mtWarning,[mbOK],0);
+    Application.Terminate;
+  end;
+ //Connection2A.ADOInTable.Close;
+end;
+
+procedure TFrmLogin.edtPasswordMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+edtPassword.PasswordChar := #0;
+end;
+
+procedure TFrmLogin.edtPasswordMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+edtPassword.PasswordChar := '*';
+end;
+
+procedure TFrmLogin.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+ Application.Terminate;
+ FrmRegister.FontRemoveChange;
+end;
+
+procedure TFrmLogin.FormResize(Sender: TObject);
+begin
+FrmLogin.Height := 241;
+FrmLogin.Width := 433;
+end;
+
+procedure TFrmLogin.rbSeeMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  //edtPassword.Tex
+end;
+
+end.

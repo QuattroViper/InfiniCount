@@ -1,0 +1,303 @@
+unit Register;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, jpeg, ExtCtrls;
+
+type
+  arrID = array[1..7] of string;
+  TFrmRegister = class(TForm)
+    edtNaam: TEdit;
+    edtVan: TEdit;
+    edtID: TEdit;
+    chkbox: TCheckBox;
+    btnRegister: TButton;
+    btnBack: TButton;
+    img1: TImage;
+    lblNaam: TLabel;
+    lblVan: TLabel;
+    lblID: TLabel;
+    lbl1: TLabel;
+    chkAdmin: TCheckBox;
+    edtBeginB: TEdit;
+    lbl2: TLabel;
+    lbl3: TLabel;
+    procedure btnRegisterClick(Sender: TObject);
+    procedure btnBackClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+  aID : arrID;
+    function PassGen : string;
+    procedure FontAddChange;
+    procedure FontRemoveChange;
+  end;
+
+var
+  FrmRegister: TFrmRegister;
+
+implementation
+
+uses Main, Begin_u, Connection, Connection2, Warning, frmLoadingg, Login,
+  Transaction;
+
+{$R *.dfm}
+
+procedure TFrmRegister.btnBackClick(Sender: TObject);
+begin
+FrmRegister.Hide;
+frmLoading.Hide;
+FrmLogin.Show;
+end;
+
+procedure TFrmRegister.btnRegisterClick(Sender: TObject);
+var
+ Password, sgetal : string;
+ ifout : integer;
+ igetal64 : Int64;
+ bconfirm : Boolean;
+begin
+Connection2A.ADOInTable.Open;
+Connection2A.ADOInTable.First;
+ if chkAdmin.Checked = True then
+  begin
+   if MessageDlg('Do you realy want to Register as the Admin. NB, there can only be one Admin.', mtConfirmation, [mbYes, mbNo],0) = mrYes
+    then
+     begin
+      bconfirm := True;
+      if Connection2A.ADOInTable.Locate('Admin',bconfirm,[]) = True then
+       begin
+        ShowMessage('There is already an User as an Admin registered');
+        bconfirm := False;
+       end
+     end
+    else
+     begin
+      bconfirm := False;
+      chkAdmin.Checked := False;
+     end;
+  end;
+
+ if Connection2A.ADOInTable.Locate('ID',edtID.Text,[]) = true
+  then ShowMessage('You are already Registered. Please go to the Sign-In page')
+  else
+   begin
+    if Length(edtID.Text) <> 13
+     then ShowMessage('There must 13 numbers in the ID field')
+     else
+      begin
+       sgetal := edtID.Text;
+       Val(sgetal,igetal64,ifout);
+       if ifout <> 0
+        then ShowMessage('There must only be numbers in the ID field')
+        else
+         begin
+          if chkbox.Checked <> true
+           then ShowMessage('Please make sure you agree with the Terms & Conditions')
+           else
+            begin
+             sgetal := edtBeginB.Text;
+             Val(sgetal,igetal64,ifout);
+             if ifout <> 0
+              then ShowMessage('There must only be numbers in the Start Amount field')
+              else
+               begin
+                Password := PassGen;
+                ShowMessage('Your password is :    ' + Password + ' .' + '   Please keep it safe.');
+                 with Connection2A do
+                  begin
+                   ADOInTable.Last;
+                   ADOInTable.Insert;
+                   ADOInTable['ID'] := edtID.Text;
+                   ADOInTable['RName'] := edtNaam.Text;
+                   ADOInTable['RSurname'] := edtVan.Text;
+                   ADOInTable['Password'] := Password;
+                   ADOInTable['WarnAt'] := 99;
+                   ADOInTable['MaxExp'] := 10000;
+                   if bconfirm = True
+                    then ADOInTable['Admin'] := True
+                    else ADOInTable['Admin'] := False;
+                   ADOInTable.Post;
+                  end;
+                 frmMain.LoggedInAs := edtNaam.Text;
+                 frmMain.LoggedInID := edtID.Text;
+                 Connection2A.ADOInTable.Locate('ID',frmMain.LoggedInID,[]);
+                 frmMain.lblGebruikerNaam.Caption := Connection2A.ADOInTable['RName'] + ' ' + Connection2A.ADOInTable['RSurname'];
+                 frmMain.LoggedInAdmin := Connection2A.ADOInTable['Admin'];
+                 frmWarning.chkEnabled.Checked := False;
+                 frmMain.DBGrid.DataSource.DataSet := Form1.ADODataSetRun;
+                 FrmRegister.Hide;
+                 frmMain.Show;
+                 with Connection.Form1 do
+                  begin
+                   tblPMD.Open;
+                   tblPMD.Last;
+                   tblPMD.Insert;
+                   tblPMD['ID'] := frmMain.LoggedInID;
+                   tblPMD['Income1'] := 1;
+                   tblPMD['Income1Enable'] := False;
+                   tblPMD['Income2'] := 1;
+                   tblPMD['Income2Enable'] := False;
+                   tblPMD['Income3'] := 1;
+                   tblPMD['Income3Enable'] := False;
+                   tblPMD['Expense1'] := 1;
+                   tblPMD['Expense1Enable'] := False;
+                   tblPMD['Expense2'] := 1;
+                   tblPMD['Expense2Enable'] := False;
+                   tblPMD['Expense3'] := 1;
+                   tblPMD['Expense3Enable'] := False;
+                   tblPMD.Post;
+                   tblPMD.Close;
+                  end;
+                 with Connection.Form1 do
+                  begin
+                   tblChecking.Open;
+                   tblChecking.Last;
+                   tblChecking.Insert;
+                   tblChecking['ID'] := frmMain.LoggedInID;
+                   tblChecking['Transaction Date'] := Now;
+                   tblChecking['Payee'] := edtNaam.Text;
+                   tblChecking['Category'] := 'Register';
+                   tblChecking['Amount In'] := StrToInt(edtBeginB.Text);
+                   tblChecking['Transaction Type'] := 'Deposit';
+                   tblChecking.Post;
+                   tblChecking.Close;
+                    tblCredit.Open;
+                    tblCredit.Last;
+                    tblCredit.Insert;
+                    tblCredit['ID'] := frmMain.LoggedInID;
+                    tblCredit['Transaction Date'] := Now;
+                    tblCredit['Payee'] := edtNaam.Text;
+                    tblCredit['Category'] := 'Register';
+                    tblCredit['Amount In'] := StrToInt(edtBeginB.Text);
+                    tblCredit['Transaction Type'] := 'Deposit';
+                    tblCredit.Post;
+                    tblCredit.Close;
+                     tblSavings.Open;
+                     tblSavings.Last;
+                     tblSavings.Insert;
+                     tblSavings['ID'] := frmMain.LoggedInID;
+                     tblSavings['Transaction Date'] := Now;
+                     tblSavings['Payee'] := edtNaam.Text;
+                     tblSavings['Category'] := 'Register';
+                     tblSavings['Amount Out'] := StrToInt(edtBeginB.Text);
+                     tblSavings['Transaction Type'] := 'Deposit';
+                     tblSavings.Post;
+                     tblSavings.Close;
+                  end;
+
+               end;
+            end;
+         end;
+      end
+   end;
+   Connection2A.ADOInTable.Close;
+end;
+
+procedure TFrmRegister.FontAddChange;
+begin
+ AddFontResource('Fonts\FONTSHUI.TTF');
+ AddFontResource('Fonts\ADDICT.TTF');
+ AddFontResource('Fonts\GRADGN_.TTF');
+ AddFontResource('Fonts\tahoma_0.TTF');
+ AddFontResource('Fonts\tahomabd_0.TTF');
+ AddFontResource('Fonts\regenera.TTF');
+ AddFontResource('Fonts\NEUROTOX.TTF');
+ AddFontResource('Fonts\Alpha Romanie G98.TTF');
+ AddFontResource('Fonts\dichtmy.TTF');
+ AddFontResource('Fonts\39smooth.TTF');
+ AddFontResource('Fonts\HARNGTON.TTF');
+ AddFontResource('Fonts\bottix.TTF');
+ AddFontResource('Fonts\teen___.TTF');
+ AddFontResource('Fonts\teenbdit.TTF');
+ AddFontResource('Fonts\teenbold.TTF');
+ AddFontResource('Fonts\teenital.TTF');
+ AddFontResource('Fonts\teenlita.TTF');
+ AddFontResource('Fonts\teenlite.TTF');
+end;
+
+procedure TFrmRegister.FontRemoveChange;
+begin
+ RemoveFontResource('Fonts\FONTSHUI.TTF');
+ RemoveFontResource('Fonts\ADDICT.TTF');
+ RemoveFontResource('Fonts\GRADGN_.TTF');
+ RemoveFontResource('Fonts\tahoma_0.TTF');
+ RemoveFontResource('Fonts\tahomabd_0.TTF');
+ RemoveFontResource('Fonts\regenera.TTF');
+ RemoveFontResource('Fonts\NEUROTOX.TTF');
+ RemoveFontResource('Fonts\Alpha Romanie G98.TTF');
+ RemoveFontResource('Fonts\dichtmy.TTF');
+ RemoveFontResource('Fonts\39smooth.TTF');
+ RemoveFontResource('Fonts\HARNGTON.TTF');
+ RemoveFontResource('Fonts\bottix.TTF');
+ RemoveFontResource('Fonts\teen___.TTF');
+ RemoveFontResource('Fonts\teenbdit.TTF');
+ RemoveFontResource('Fonts\teenbold.TTF');
+ RemoveFontResource('Fonts\teenital.TTF');
+ RemoveFontResource('Fonts\teenlita.TTF');
+ RemoveFontResource('Fonts\teenlite.TTF');
+end;
+
+procedure TFrmRegister.FormActivate(Sender: TObject);
+begin
+ edtNaam.SetFocus;
+end;
+
+procedure TFrmRegister.FormCreate(Sender: TObject);
+begin
+ FontAddChange;
+// frmLoading.First := True;
+// frmLoading.Show;             Access violation error. Kry nerens Probleem op die Form nie
+end;
+
+procedure TFrmRegister.FormResize(Sender: TObject);
+begin
+FrmRegister.Height := 353;
+FrmRegister.Width := 503;
+end;
+
+function TFrmRegister.PassGen: string;
+var
+ sDigitString, sDigitString2, sPreFinal, sPassword : string;
+ Digits1 : Int64;
+ digits2, iOngelyk, I, J : Integer;
+begin
+ frmWarning.Dates;
+ sDigitString := IntToStr(Length(edtNaam.Text)) + IntToStr(Length(edtVan.Text)) + IntToStr(frmWarning.MonthDays) + IntToStr(frmWarning.MyYear);
+ Digits1 := StrToInt64(sDigitString);
+
+  iOngelyk := 1;
+  for I := 0 to 7 do
+   begin
+    aID[I] := edtID.Text[iOngelyk];
+    Inc(iOngelyk,2);
+   end;
+
+  for J := 1 to 7 do
+   begin
+    sDigitString2 := sDigitString2 + aID[J];
+   end;
+
+  sPreFinal := IntToStr(Digits1) + sDigitString2;
+  sPassword := IntToHex(StrToInt64(sPreFinal),2);
+  Result := sPassword;
+end;
+
+
+
+ //Ekstra Nots
+   //Die edtID is gelimit om net 13 karakters te neem
+   //Die Gebruiker moet die T&C's check
+   //Daar mag net een Admin op die DataBasis wees
+   //ID en Begin Amounts edit boxes is op 'n validate
+
+ //Vloei vanaf hierdie Form
+  //BUTTONS
+   //..Register --> FrmMain(Main)
+   //..Login --> FrmLogin(Login)
+end.

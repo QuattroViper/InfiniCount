@@ -1,0 +1,97 @@
+object frmregister: Tfrmregister
+  Left = 0
+  Top = 0
+  Caption = 'register'
+  ClientHeight = 363
+  ClientWidth = 598
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lblNaam: TLabel
+    Left = 24
+    Top = 48
+    Width = 98
+    Height = 31
+    Caption = 'Name :'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Addict'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblVan: TLabel
+    Left = 8
+    Top = 93
+    Width = 146
+    Height = 31
+    Caption = 'Surname :'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Addict'
+    Font.Style = []
+    ParentFont = False
+  end
+  object lblID: TLabel
+    Left = 74
+    Top = 141
+    Width = 51
+    Height = 31
+    Caption = 'ID :'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -27
+    Font.Name = 'Addict'
+    Font.Style = []
+    ParentFont = False
+  end
+  object edtNaam: TEdit
+    Left = 131
+    Top = 53
+    Width = 121
+    Height = 26
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    Text = 'edtNaam'
+  end
+  object edtVan: TEdit
+    Left = 131
+    Top = 101
+    Width = 121
+    Height = 26
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 1
+    Text = 'edtVan'
+  end
+  object edtID: TEdit
+    Left = 131
+    Top = 141
+    Width = 121
+    Height = 26
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -15
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 2
+    Text = 'edtID'
+  end
+end

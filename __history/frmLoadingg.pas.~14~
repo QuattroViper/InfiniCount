@@ -1,0 +1,44 @@
+unit frmLoadingg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, MPlayer, ExtCtrls;
+
+type
+  TfrmLoading = class(TForm)
+    pnl1: TPanel;
+    mpLoad: TMediaPlayer;
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    First : Boolean;
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLoading: TfrmLoading;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmLoading.FormCreate(Sender: TObject);
+begin
+ First := True;
+end;
+
+procedure TfrmLoading.FormShow(Sender: TObject);
+begin
+ //if First = True then
+ // begin
+   mpLoad.Open;
+   mpLoad.Play;
+ // end;
+ First := False;
+
+end;
+
+end.

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2015/04/22 18:12:21.955.pas,C:\Users\QuattroViper\Documents\RAD Studio\Projects\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\InfiniCount_u.pas</Transaction>
+    <Transaction>2015/04/22 18:12:21.955.dfm,C:\Users\QuattroViper\Documents\RAD Studio\Projects\Unit1.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\InfiniCount_u.dfm</Transaction>
+    <Transaction>2015/04/22 18:12:43.361.dproj,C:\Users\QuattroViper\Documents\RAD Studio\Projects\Project1.dproj=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\InfiniCount_p.dproj</Transaction>
+    <Transaction>2015/04/22 18:31:25.378.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Login.pas</Transaction>
+    <Transaction>2015/04/22 18:31:25.378.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Login.dfm</Transaction>
+    <Transaction>2015/04/22 18:31:38.984.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit2.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Main.pas</Transaction>
+    <Transaction>2015/04/22 18:31:38.984.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit2.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Main.dfm</Transaction>
+    <Transaction>2015/04/22 18:33:14.316.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Transaction.pas</Transaction>
+    <Transaction>2015/04/22 18:33:14.316.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Transaction.dfm</Transaction>
+    <Transaction>2015/04/22 18:41:49.740.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\InfiniCount_u.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Register.pas</Transaction>
+    <Transaction>2015/04/22 18:41:49.740.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\InfiniCount_u.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Register.dfm</Transaction>
+    <Transaction>2015/04/22 19:19:08.117.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Begin_u.pas</Transaction>
+    <Transaction>2015/04/22 19:19:08.117.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Begin_u.dfm</Transaction>
+    <Transaction>2015/04/26 23:08:25.820.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Category.pas</Transaction>
+    <Transaction>2015/04/26 23:08:25.820.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Category.dfm</Transaction>
+    <Transaction>2015/05/23 19:05:46.492.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Connection.pas</Transaction>
+    <Transaction>2015/05/23 19:05:46.492.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Connection.dfm</Transaction>
+    <Transaction>2015/05/24 18:16:19.716.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit2.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Connection2.pas</Transaction>
+    <Transaction>2015/05/24 18:16:19.716.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit2.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Connection2.dfm</Transaction>
+    <Transaction>2015/05/25 21:54:26.609.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Idees.pas</Transaction>
+    <Transaction>2015/07/03 13:22:53.113.pas,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit2.pas=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Warning.pas</Transaction>
+    <Transaction>2015/07/03 13:22:53.113.dfm,C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Unit2.dfm=C:\Users\QuattroViper\Desktop\IT PAT\Project delphi 10\Warning.dfm</Transaction>
+    <Transaction>2015/07/05 23:47:39.304.pas,C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Unit2.pas=C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\frmLoadingg.pas</Transaction>
+    <Transaction>2015/07/05 23:47:39.304.dfm,C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Unit2.dfm=C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\frmLoadingg.dfm</Transaction>
+    <Transaction>2015/07/10 12:38:56.194.pas,C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\TClass.pas</Transaction>
+    <Transaction>2015/07/11 12:47:59.365.pas,C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Unit2.pas=C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\admin.pas</Transaction>
+    <Transaction>2015/07/11 12:47:59.365.dfm,C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Unit2.dfm=C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\admin.dfm</Transaction>
+    <Transaction>2015/08/05 21:52:31.982.pas,C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Unit1.pas=C:\Users\QuattroViper\Dropbox\IT PAT\Project delphi 10\Timer.pas</Transaction>
+  </Transactions>
+</BorlandProject>

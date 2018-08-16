@@ -1,0 +1,142 @@
+object frmAdmin: TfrmAdmin
+  Left = 0
+  Top = 0
+  Caption = 'Administation'
+  ClientHeight = 561
+  ClientWidth = 843
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object lbl1: TLabel
+    Left = 280
+    Top = 8
+    Width = 191
+    Height = 41
+    Caption = 'Administration'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -29
+    Font.Name = 'Teen Light'
+    Font.Style = []
+    ParentFont = False
+  end
+  object dbgrdAdmin: TDBGrid
+    Left = 8
+    Top = 136
+    Width = 827
+    Height = 389
+    TabOrder = 0
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+  end
+  object pnl1: TPanel
+    Left = 264
+    Top = 80
+    Width = 571
+    Height = 50
+    TabOrder = 1
+    object btnCredit: TButton
+      Left = 232
+      Top = 11
+      Width = 105
+      Height = 30
+      Caption = 'Credit Account'
+      TabOrder = 0
+      OnClick = btnCreditClick
+    end
+    object btnChecking: TButton
+      Left = 10
+      Top = 12
+      Width = 105
+      Height = 30
+      Caption = 'Checking Account'
+      TabOrder = 1
+      OnClick = btnCheckingClick
+    end
+    object btnSavings: TButton
+      Left = 121
+      Top = 11
+      Width = 105
+      Height = 30
+      Caption = 'Savings Account'
+      TabOrder = 2
+      OnClick = btnSavingsClick
+    end
+    object btnUsers: TButton
+      Left = 343
+      Top = 11
+      Width = 105
+      Height = 30
+      Caption = 'Users Tabel'
+      TabOrder = 3
+      OnClick = btnUsersClick
+    end
+    object btnPMD: TButton
+      Left = 454
+      Top = 11
+      Width = 105
+      Height = 30
+      Caption = 'PerMonthDetailsTable'
+      TabOrder = 4
+      OnClick = btnUsersClick
+    end
+  end
+  object pnl2: TPanel
+    Left = 584
+    Top = 26
+    Width = 251
+    Height = 48
+    TabOrder = 2
+    object dbnvgrAdmin: TDBNavigator
+      Left = 11
+      Top = 8
+      Width = 198
+      Height = 33
+      VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbDelete, nbRefresh]
+      TabOrder = 0
+    end
+  end
+  object bmbBack: TBitBtn
+    Left = 382
+    Top = 531
+    Width = 75
+    Height = 25
+    DoubleBuffered = True
+    Kind = bkOK
+    ParentDoubleBuffered = False
+    TabOrder = 3
+    OnClick = bmbBackClick
+  end
+  object pnl3: TPanel
+    Left = 8
+    Top = 77
+    Width = 156
+    Height = 53
+    Color = 13665813
+    ParentBackground = False
+    TabOrder = 4
+    object lbl10: TLabel
+      Left = 24
+      Top = 9
+      Width = 95
+      Height = 32
+      Cursor = crHandPoint
+      Caption = 'Pie Chart'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -21
+      Font.Name = 'Teen'
+      Font.Style = [fsBold, fsUnderline]
+      ParentFont = False
+    end
+  end
+end

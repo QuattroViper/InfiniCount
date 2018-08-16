@@ -1,0 +1,38 @@
+object Connection2A: TConnection2A
+  Left = 0
+  Top = 0
+  Caption = 'Connection2A'
+  ClientHeight = 243
+  ClientWidth = 527
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ADOInCon: TADOConnection
+    ConnectionString = 
+      'Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\QuattroVip' +
+      'er\Dropbox\IT PAT\Project delphi 10\InfiniCount.mdb;Mode=ReadWri' +
+      'te;Persist Security Info=False'
+    LoginPrompt = False
+    Provider = 'Microsoft.Jet.OLEDB.4.0'
+    Left = 32
+    Top = 88
+  end
+  object ADOInTable: TADOTable
+    Connection = ADOInCon
+    CursorType = ctStatic
+    TableName = 'Users'
+    Left = 112
+    Top = 88
+  end
+  object ADODataSourceIn: TDataSource
+    DataSet = ADOInTable
+    Left = 208
+    Top = 88
+  end
+end

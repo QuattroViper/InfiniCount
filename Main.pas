@@ -1,0 +1,601 @@
+unit Main;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ComCtrls, ExtCtrls, StdCtrls, Buttons, Grids, DBGrids, jpeg, XPMan,
+  DBCtrls, DB, ADODB;
+
+type
+  TfrmMain = class(TForm)
+    pgcMain: TPageControl;
+    tsTransaksie: TTabSheet;
+    tsMonthlyDetails: TTabSheet;
+    BmbCategory: TBitBtn;
+    btnAddTransaction: TBitBtn;
+    lbl2: TLabel;
+    pnlUpdates: TPanel;
+    lbl1: TLabel;
+    lbl3: TLabel;
+    pnlTabs: TPanel;
+    lbl4: TLabel;
+    cbbAccounts: TComboBox;
+    lbl5: TLabel;
+    cbbPeriod: TComboBox;
+    pnl2: TPanel;
+    lbl7: TLabel;
+    lbl8: TLabel;
+    lbl9: TLabel;
+    pnl1: TPanel;
+    lbl6: TLabel;
+    lblChecking: TLabel;
+    lblCredit: TLabel;
+    lblSavings: TLabel;
+    tsAbout: TTabSheet;
+    pnl4: TPanel;
+    lbl11: TLabel;
+    redt1: TRichEdit;
+    pnl6: TPanel;
+    lbl13: TLabel;
+    lbl14: TLabel;
+    edtIncomePM: TEdit;
+    pnl7: TPanel;
+    bmbLogUit: TBitBtn;
+    img1: TImage;
+    lblGebruikerNaam: TLabel;
+    lblGebruikerBesonderhede: TLabel;
+    DBGrid: TDBGrid;
+    bmbAdmin: TBitBtn;
+    Panel1: TPanel;
+    Label1: TLabel;
+    DBNav: TDBNavigator;
+    lbl12: TLabel;
+    ADOQuaryChecking: TADOQuery;
+    ADOQuarySavings: TADOQuery;
+    ADOQuaryCredit: TADOQuery;
+    bmbWarnings: TBitBtn;
+    pnl5: TPanel;
+    lbl15: TLabel;
+    lblUsWar: TLabel;
+    ADOQuaryUsers: TADOQuery;
+    edtExpensePM: TEdit;
+    lbl16: TLabel;
+    chkIn1: TCheckBox;
+    chkIn2: TCheckBox;
+    chkIn3: TCheckBox;
+    edtIncomePM2: TEdit;
+    edtIncomePM3: TEdit;
+    chkOut: TCheckBox;
+    chkOut2: TCheckBox;
+    edtExpensePM2: TEdit;
+    chkOut3: TCheckBox;
+    edtExpensePM3: TEdit;
+    btnUpdate: TButton;
+    lbl17: TLabel;
+    procedure bmbLogUitClick(Sender: TObject);
+    procedure btnAddTransactionClick(Sender: TObject);
+    procedure BmbCategoryClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure cbbAccountsSelect(Sender: TObject);
+    procedure Label1Click(Sender: TObject);
+    procedure cbbPeriodSelect(Sender: TObject);
+    procedure DBGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure bmbWarningsClick(Sender: TObject);
+    procedure lbl9Click(Sender: TObject);
+    procedure bmbAdminClick(Sender: TObject);
+    procedure chkIn1Click(Sender: TObject);
+    procedure chkIn2Click(Sender: TObject);
+    procedure ck(Sender: TObject);
+    procedure chkOutClick(Sender: TObject);
+    procedure chkOut2Click(Sender: TObject);
+    procedure chkOut3Click(Sender: TObject);
+    procedure btnUpdateClick(Sender: TObject);
+    procedure pgcMainChange(Sender: TObject);
+    procedure FormResize(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+  private
+    trich : TRichEdit;
+    iIndex : Integer;
+    FirstRun : Boolean;
+  public
+    LoggedInAs, LoggedInID : string;
+    LoggedInAdmin : Boolean;
+    function Validate(sgetal:string) : Boolean;
+  end;
+
+var
+  frmMain: TfrmMain;
+
+implementation
+
+uses Register, Transaction, Category, Connection, Warning, Connection2, admin;
+
+{$R *.dfm}
+
+procedure TfrmMain.bmbAdminClick(Sender: TObject);
+begin
+Connection2A.ADOInTable.Open;
+Connection2A.ADOInTable.First;
+ if (Connection2A.ADOInTable.Locate('ID',frmMain.LoggedInID,[]) = True) and (frmMain.LoggedInAdmin = True)                                  {if Connection2A.ADOInTable.Locate('ID;Admin;',VarArrayOf([frmMain.LoggedInID,frmMain.LoggedInAdmin]),[]) = True  }
+  then frmAdmin.Show
+  else ShowMessage('You are Not allowed to access that Page. Only an Admin can Access it.');
+Connection2A.ADOInTable.Close;
+end;
+
+procedure TfrmMain.BmbCategoryClick(Sender: TObject);
+begin
+FrmCategory.Show;
+end;
+
+procedure TfrmMain.btnAddTransactionClick(Sender: TObject);
+begin
+frmTrans.Show;
+if (frmWarning.chkEnabled.Checked = False) or ((frmWarning.LockCheck = False) and (frmWarning.LockSaving = False) and (frmWarning.LockCredit = False)) then
+ begin
+  with frmTrans do
+   begin
+    with cbbAccountKies do
+     begin
+      Items[0] := 'Checking Account';
+      Items[1] := 'Savings Account';
+      Items[2] := 'Credit Account';
+     end;
+
+    with cbbToAccount do
+     begin
+      Items[0] := 'Checking Account';
+      Items[1] := 'Savings Account';
+      Items[2] := 'Credit Account';
+     end;
+
+    with cbbType do
+     begin
+      Items[0] :=  'Deposit';
+      Items[1] :=  'Purchase';
+      Items[2] :=  'Transfer';
+      Items[3] :=  'Check';
+     end;
+   end;
+ end;
+
+  frmTrans.CheckLock;
+
+   if frmWarning.chkEnabled.Checked = True
+   then frmTrans.chkDatum.Checked := True;
+
+end;
+
+procedure TfrmMain.btnUpdateClick(Sender: TObject);
+begin
+ if Validate(edtIncomePM.Text) = True then
+  if Validate(edtIncomePM2.Text) = True then
+   if Validate(edtIncomePM3.Text) = True then
+    if Validate(edtExpensePM.Text) = True then
+     if Validate(edtExpensePM2.Text) = True then
+      if Validate(edtExpensePM3.Text) = True then
+       begin
+       with Connection.Form1 do
+        begin
+         ShowMessage('begin');
+          tblPMD.Open;
+          tblPMD.First;
+          tblPMD.Locate('ID',frmMain.LoggedInID,[]);
+          tblPMD.Edit;
+          tblPMD['Income1'] := StrToInt(edtIncomePM.Text);
+          if chkIn1.Checked = True
+           then tblPMD['Income1Enable'] := True
+           else tblPMD['Income1Enable'] := False;
+          if chkIn2.Checked = True
+           then tblPMD['Income2Enable'] := True
+           else tblPMD['Income2Enable'] := False;
+          if chkIn3.Checked = True
+           then tblPMD['Income3Enable'] := True
+           else tblPMD['Income3Enable'] := False;
+          if chkOut.Checked = True
+           then tblPMD['Expense1Enable'] := True
+           else tblPMD['Expense1Enable'] := False;
+          if chkOut2.Checked = True
+           then tblPMD['Expense2Enable'] := True
+           else tblPMD['Expense2Enable'] := False;
+          if chkOut3.Checked = True
+           then tblPMD['Expense3Enable'] := True
+           else tblPMD['Expense3Enable'] := False;
+          tblPMD['Income2'] := StrToInt(edtIncomePM2.Text);
+          tblPMD['Income3'] := StrToInt(edtIncomePM3.Text);
+          tblPMD['Expense1'] := StrToInt(edtExpensePM.Text);
+          tblPMD['Expense2'] := StrToInt(edtExpensePM2.Text);
+          tblPMD['Expense3'] := StrToInt(edtExpensePM3.Text);
+          tblPMD.Post;
+          tblPMD.Close;
+        end;
+       end;
+end;
+
+procedure TfrmMain.cbbAccountsSelect(Sender: TObject);
+begin
+ iIndex := 0;
+ if cbbAccounts.ItemIndex = 0 then
+  begin
+   iIndex := 0;
+   Form1.ADODataSetChecking.Active := False;
+   DBGrid.DataSource.DataSet := Form1.ADODataSetChecking;
+   DBNav.DataSource.DataSet := Form1.ADODataSetChecking;
+   Form1.ADODataSetChecking.CommandText := 'SELECT * FROM [Checking Account] WHERE [ID] = '''+LoggedInID+''' ';
+   Form1.ADODataSetChecking.Active := True;
+  end;
+
+ if cbbAccounts.ItemIndex = 1 then
+  begin
+   iIndex := 1;
+   form1.ADODataSetSavings.Active := False;
+   DBGrid.DataSource.DataSet := Form1.ADODataSetSavings;
+   DBNav.DataSource.DataSet := Form1.ADODataSetSavings;
+   form1.ADODataSetSavings.CommandText := 'SELECT * FROM [Savings Account] WHERE [ID] = '''+LoggedInID+''' ';
+   form1.ADODataSetSavings.Active := True;
+  end;
+
+ if cbbAccounts.ItemIndex = 2 then
+  begin
+   iIndex := 2;
+   Form1.ADODataSetCredit.Active := False;
+   DBGrid.DataSource.DataSet := Form1.ADODataSetCredit;
+   DBNav.DataSource.DataSet := Form1.ADODataSetCredit;
+   Form1.ADODataSetCredit.CommandText := 'SELECT * FROM [Credit Account] WHERE [ID] = '''+LoggedInID+''' ';
+   Form1.ADODataSetCredit.Active := True;
+  end;
+end;
+
+procedure TfrmMain.cbbPeriodSelect(Sender: TObject);
+var
+  sHolder : string;
+begin
+  sHolder := cbbAccounts.Items.Strings[iIndex] + ' ' + 'Account';
+
+ if cbbPeriod.ItemIndex = 0 then
+  begin
+   with Connection.Form1.ADODataSetSavings do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE DAY([Transaction Date]) = DAY(date())  AND  MONTH([Transaction Date]) = MONTH(date()) AND  YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetCredit do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE DAY([Transaction Date]) = DAY(date())  AND  MONTH([Transaction Date]) = MONTH(date()) AND  YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetChecking do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE DAY([Transaction Date]) = DAY(date())  AND  MONTH([Transaction Date]) = MONTH(date()) AND  YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+  end;
+
+  {if cbbPeriod.ItemIndex = 1 then
+  begin
+   with Connection.Form1.ADODataSetSavings do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE (DAY([Transaction Date])) between ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetCredit do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetChecking do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] ';
+     Active := True;
+    end;
+  end;          }                   //No use for this code
+
+  if cbbPeriod.ItemIndex = 2 then
+  begin
+   with Connection.Form1.ADODataSetSavings do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE MONTH([Transaction Date]) = MONTH(date())  AND  YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetCredit do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE MONTH([Transaction Date]) = MONTH(date())  AND  YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetChecking do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE MONTH([Transaction Date]) = MONTH(date())  AND  YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+  end;
+
+  if cbbPeriod.ItemIndex = 3 then
+  begin
+   with Connection.Form1.ADODataSetSavings do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetCredit do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+
+    with Connection.Form1.ADODataSetChecking do
+    begin
+     Active := False;
+     CommandText := 'SELECT * FROM [' + sHolder + '] WHERE YEAR([Transaction Date]) = YEAR(date()) AND [ID] = '''+LoggedInID+''' ';
+     Active := True;
+    end;
+  end;
+
+  if cbbPeriod.ItemIndex = 4 then
+   begin
+    with Connection.Form1.ADODataSetSavings do
+     begin
+      Active := False;
+      CommandText := 'SELECT * FROM [' + sHolder + '] WHERE  [ID] = '''+LoggedInID+''' ';
+      Active := True;
+     end;
+
+    with Connection.Form1.ADODataSetCredit do
+     begin
+      Active := False;
+      CommandText := 'SELECT * FROM [' + sHolder + '] WHERE  [ID] = '''+LoggedInID+''' ';
+      Active := True;
+     end;
+
+    with Connection.Form1.ADODataSetChecking do
+     begin
+      Active := False;
+      CommandText := 'SELECT * FROM [' + sHolder + '] WHERE  [ID] = '''+LoggedInID+''' ';
+      Active := True;
+     end;
+   end;
+end;
+
+procedure TfrmMain.chkIn1Click(Sender: TObject);
+begin
+ if chkIn1.Checked = True
+  then edtIncomePM.Enabled := True
+  else edtIncomePM.Enabled := False;
+end;
+
+procedure TfrmMain.chkIn2Click(Sender: TObject);
+begin
+ if chkIn2.Checked = True
+  then edtIncomePM2.Enabled := True
+  else edtIncomePM2.Enabled := False;
+end;
+
+procedure TfrmMain.chkOut2Click(Sender: TObject);
+begin
+ if chkOut2.Checked = True
+  then edtExpensePM2.Enabled := True
+  else edtExpensePM2.Enabled := False;
+end;
+
+procedure TfrmMain.chkOut3Click(Sender: TObject);
+begin
+ if chkout3.checked = True
+  then edtExpensePM3.Enabled := True
+  else edtExpensePM3.Enabled := False;
+end;
+
+procedure TfrmMain.chkOutClick(Sender: TObject);
+begin
+ if chkOut.Checked = True
+  then edtExpensePM.Enabled := True
+  else edtExpensePM.Enabled := False;
+end;
+
+procedure TfrmMain.ck(Sender: TObject);
+begin
+ if chkIn3.Checked = True
+  then edtIncomePM3.Enabled := True
+  else edtIncomePM3.Enabled := False;
+
+end;
+
+procedure TfrmMain.DBGridDrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+const
+ RowColors: array[Boolean] of TColor = (clWhite, clSilver);
+var
+ oddRow: Boolean;
+begin
+ if (sender is TDBGrid) then
+  begin
+   oddRow := Odd(TDBGrid(Sender).DataSource.DataSet.RecNo);
+   TDBGrid(Sender).Canvas.Brush.Color := RowColors[oddRow];
+   TDBGrid(Sender).DefaultDrawColumnCell(Rect, DataCol, Column, State);
+  end;
+end;
+
+procedure TfrmMain.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Application.Terminate;
+  FrmRegister.FontRemoveChange;
+end;
+
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+FirstRun := False;
+end;
+
+procedure TfrmMain.FormResize(Sender: TObject);
+begin
+frmMain.Height := 717;
+frmMain.Width := 1204;
+end;
+
+procedure TfrmMain.Label1Click(Sender: TObject);
+begin
+ if FirstRun = False then
+  begin
+   trich := TRichEdit.Create(frmMain);
+   trich.Parent := Panel1;
+   with trich do
+    begin
+     with font do
+      begin
+       Name := 'Harrington';
+       Size := 11;
+      end;
+     Height := 472;
+     left := 24;
+     Lines.Add('Help, klaar Dinamies');
+     Name := 'redaf';
+     ReadOnly := True;
+     Top := 57;
+     Width := 513;
+    end;
+    firstRun := True;
+  end;
+end;
+
+procedure TfrmMain.lbl9Click(Sender: TObject);
+begin
+ if cbbAccounts.ItemIndex = -1 then
+  begin
+   ShowMessage('Please select an account');
+  end
+ else
+ begin
+ if iIndex = 0 then
+  begin
+   Form1.ADODataSetChecking.Active := False;
+   DBGrid.DataSource.DataSet := Form1.ADODataSetChecking;
+   DBNav.DataSource.DataSet := Form1.ADODataSetChecking;
+   Form1.ADODataSetChecking.CommandText := 'SELECT Payee,[Amount Out],[Amount In],[Transaction Type] FROM [Checking Account] WHERE [ID] = '''+LoggedInID+''' ';
+   Form1.ADODataSetChecking.Active := True;
+  end;
+
+ if iIndex = 1 then
+  begin
+   form1.ADODataSetSavings.Active := False;
+   DBGrid.DataSource.DataSet := Form1.ADODataSetSavings;
+   DBNav.DataSource.DataSet := Form1.ADODataSetSavings;
+   form1.ADODataSetSavings.CommandText := 'SELECT Payee,[Amount Out],[Amount In],[Transaction Type] FROM [Savings Account] WHERE [ID] = '''+LoggedInID+''' ';
+   form1.ADODataSetSavings.Active := True;
+  end;
+
+ if iIndex = 2 then
+  begin
+   Form1.ADODataSetCredit.Active := False;
+   DBGrid.DataSource.DataSet := Form1.ADODataSetCredit;
+   DBNav.DataSource.DataSet := Form1.ADODataSetCredit;
+   Form1.ADODataSetCredit.CommandText := 'SELECT Payee,[Amount Out],[Amount In],[Transaction Type] FROM [Credit Account] WHERE [ID] = '''+LoggedInID+''' ';
+   Form1.ADODataSetCredit.Active := True;
+  end;
+ end;
+end;
+
+procedure TfrmMain.pgcMainChange(Sender: TObject);
+begin
+ with Connection.Form1 do
+  begin
+   tblPMD.Open;
+   tblPMD.First;
+   tblPMD.Locate('ID',frmMain.LoggedInID,[]);
+   if tblPMD['Income1Enable'] = True
+    then chkIn1.Checked := True
+    else chkIn1.Checked := False;
+   if tblPMD['Income2Enable'] = True
+    then chkIn2.Checked := True
+    else chkIn2.Checked := False;
+   if tblPMD['Income3Enable'] = True
+    then chkIn3.Checked := True
+    else chkIn3.Checked := False;
+   if tblPMD['Expense1Enable'] = True
+    then chkOut.Checked := True
+    else chkOut.Checked := False;
+   if tblPMD['Expense2Enable'] = True
+    then chkOut2.Checked := True
+    else chkOut2.Checked := False;
+   if tblPMD['Expense3Enable'] = True
+    then chkOut3.Checked := True
+    else chkOut3.Checked := False;
+   edtIncomePM.Text := IntToStr(tblPMD['Income1']);
+   edtIncomePM2.Text := IntToStr(tblPMD['Income2']);
+   edtIncomePM3.Text := IntToStr(tblPMD['Income3']);
+   edtExpensePM.Text := IntToStr(tblPMD['Expense1']);
+   edtExpensePM2.Text := IntToStr(tblPMD['Expense2']);
+   edtExpensePM3.Text := IntToStr(tblPMD['Expense3']);
+   tblPMD.Close;
+  end;
+end;
+
+function TfrmMain.Validate(sgetal:string): Boolean;
+var
+ ifout, igetal : Integer;
+begin
+ Val(sgetal,igetal,ifout);
+ if ifout <> 0 then
+  begin
+   ShowMessage('Please make sure that all the boxes have only Numbers in them');
+   result := False;
+  end
+ else Result := True;
+end;
+
+procedure TfrmMain.bmbLogUitClick(Sender: TObject);
+begin
+frmMain.Hide;
+FrmRegister.Show;
+ LoggedInAs := '';
+ LoggedInID := '';
+end;
+
+procedure TfrmMain.bmbWarningsClick(Sender: TObject);
+begin
+ with frmWarning do
+  begin
+   Show;
+   cbbTrans.ItemIndex := -1;
+   lblPredFor.Caption := 'Predicted expense :';
+   lblPredic.Caption := 'R';
+   lblUsed.Caption := '%';
+   lblPrePerUsed.Caption := '%';
+   Connection2A.ADOInTable.open;
+   chkEnabled.Checked := Connection2A.ADOInTable['Warning'];
+   Connection2A.ADOInTable.close;
+  end;
+end;
+
+
+  //Ekstra Notas
+   //Die gebruiker gaan moet as 'n admin op die databasis gerigestreer wees.
+
+  //Vloei vanaf hierdie form
+   //BUTTONS
+    //..Transaction --> FrmTrans(Transaction)
+    //..Warning --> FrmWarning(Warning)
+    //..Category --> FrmCategory(Category)
+    //..Admin --> FrmAdmin(Admin)
+    //..LogOut --> FrmRegister(Register)
+   //PAGE CONTROLL
+    //Monthly Details --> Gaan daar die maandlikse details kan verander
+    //About --> Net ekstra inligting oor die program, en die help daar.
+
+end.

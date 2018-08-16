@@ -1,0 +1,47 @@
+unit frmLoadingg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, MPlayer, ExtCtrls;
+
+type
+  TfrmLoading = class(TForm)
+    mpLoad: TMediaPlayer;
+    pnlShow: TPanel;
+    procedure FormShow(Sender: TObject);
+  private
+
+  public
+    First : Boolean;
+  end;
+
+var
+  frmLoading: TfrmLoading;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmLoading.FormShow(Sender: TObject);
+begin
+ if First = True then
+  begin
+   with mpLoad do
+    begin
+     FileName := 'Animation\Loading Screen HD with Sound.avi';
+     Display := pnlShow;
+     Open;
+     Play;
+    end;
+   First := False;
+  end;
+
+end;
+
+ //Ekstra Notas
+  //Die form is uitgesluit van die program af omdat daar
+  //'n probleem gegee word wat vir geen rede nodig is nie
+
+end.

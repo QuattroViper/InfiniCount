@@ -1,0 +1,26 @@
+unit frmLoadingg;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, MPlayer, ExtCtrls;
+
+type
+  TfrmLoading = class(TForm)
+    mpLoad: TMediaPlayer;
+    pnlShow: TPanel;
+  private
+
+  public
+    First : Boolean;
+  end;
+
+var
+  frmLoading: TfrmLoading;
+
+implementation
+
+{$R *.dfm}
+
+end.

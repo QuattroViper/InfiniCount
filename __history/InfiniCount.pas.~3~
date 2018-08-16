@@ -1,0 +1,32 @@
+unit InfiniCount;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls;
+
+type
+  Tfrmregister = class(TForm)
+    lblNaam: TLabel;
+    lblVan: TLabel;
+    edtNaam: TEdit;
+    edtVan: TEdit;
+    lblID: TLabel;
+    edtID: TEdit;
+    chkbox: TCheckBox;
+    btnRegister: TButton;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmregister: Tfrmregister;
+
+implementation
+
+{$R *.dfm}
+
+end.
